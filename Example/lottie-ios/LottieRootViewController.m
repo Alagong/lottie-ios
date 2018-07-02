@@ -66,7 +66,11 @@
                           @{@"name" : @"Animated Keyboard",
                             @"vc" : @"TypingDemoViewController"},
                           @{@"name" : @"Animated Transitions Demo",
-                            @"vc" : @"AnimationTransitionViewController"}];
+                            @"vc" : @"AnimationTransitionViewController"},
+                          @{@"name" : @"Animated UIControls Demo",
+                            @"vc" : @"LAControlsViewController"},
+                          @{@"name" : @"Download Progress Demo",
+                            @"vc" : @"LADownloadTestViewController"}];
 }
 
 - (void)_playLottieAnimation {
@@ -81,7 +85,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
   cell.textLabel.text = self.tableViewItems[indexPath.row][@"name"];
   return cell;
 }

@@ -8,67 +8,69 @@
 
 #import <Foundation/Foundation.h>
 #import "LOTPlatformCompat.h"
+#import "LOTKeyframe.h"
 
 @class LOTShapeGroup;
 @class LOTMask;
-@class LOTAnimatableColorValue;
-@class LOTAnimatablePointValue;
-@class LOTAnimatableNumberValue;
-@class LOTAnimatableScaleValue;
-@class LOTComposition;
+@class LOTAsset;
+@class LOTAssetGroup;
 
 typedef enum : NSInteger {
-  LOTLayerTypeNone,
+  LOTLayerTypePrecomp,
   LOTLayerTypeSolid,
-  LOTLayerTypeUnknown,
+  LOTLayerTypeImage,
   LOTLayerTypeNull,
-  LOTLayerTypeShape
+  LOTLayerTypeShape,
+  LOTLayerTypeUnknown
 } LOTLayerType;
 
 typedef enum : NSInteger {
   LOTMatteTypeNone,
   LOTMatteTypeAdd,
   LOTMatteTypeInvert,
-  LOTLayerTypeUknown
+  LOTMatteTypeUnknown
 } LOTMatteType;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface LOTLayer : NSObject
 
-- (instancetype)initWithJSON:(NSDictionary *)jsonDictionary fromComposition:(LOTComposition *)composition;
+- (instancetype)initWithJSON:(NSDictionary *)jsonDictionary
+              withAssetGroup:(LOTAssetGroup * _Nullable)assetGroup
+               withFramerate:(NSNumber *)framerate;
 
 @property (nonatomic, readonly) NSString *layerName;
+@property (nonatomic, readonly, nullable) NSString *referenceID;
 @property (nonatomic, readonly) NSNumber *layerID;
 @property (nonatomic, readonly) LOTLayerType layerType;
-@property (nonatomic, readonly) NSNumber *parentID;
+@property (nonatomic, readonly, nullable) NSNumber *parentID;
+@property (nonatomic, readonly) NSNumber *startFrame;
 @property (nonatomic, readonly) NSNumber *inFrame;
 @property (nonatomic, readonly) NSNumber *outFrame;
-@property (nonatomic, readonly) CGRect compBounds;
-@property (nonatomic, readonly) NSNumber *framerate;
+@property (nonatomic, readonly) NSNumber *timeStretch;
+@property (nonatomic, readonly) CGRect layerBounds;
 
-@property (nonatomic, readonly) NSArray<LOTShapeGroup *> *shapes;
-@property (nonatomic, readonly) NSArray<LOTMask *> *masks;
+@property (nonatomic, readonly, nullable) NSArray<LOTShapeGroup *> *shapes;
+@property (nonatomic, readonly, nullable) NSArray<LOTMask *> *masks;
 
-@property (nonatomic, readonly) NSNumber *solidWidth;
-@property (nonatomic, readonly) NSNumber *solidHeight;
-@property (nonatomic, readonly) UIColor *solidColor;
+@property (nonatomic, readonly, nullable) NSNumber *layerWidth;
+@property (nonatomic, readonly, nullable) NSNumber *layerHeight;
+@property (nonatomic, readonly, nullable) UIColor *solidColor;
+@property (nonatomic, readonly, nullable) LOTAsset *imageAsset;
 
-@property (nonatomic, readonly) LOTAnimatableNumberValue *opacity;
-@property (nonatomic, readonly) LOTAnimatableNumberValue *rotation;
-@property (nonatomic, readonly) LOTAnimatablePointValue *position;
+@property (nonatomic, readonly) LOTKeyframeGroup *opacity;
+@property (nonatomic, readonly, nullable) LOTKeyframeGroup *timeRemapping;
+@property (nonatomic, readonly) LOTKeyframeGroup *rotation;
+@property (nonatomic, readonly, nullable) LOTKeyframeGroup *position;
 
-@property (nonatomic, readonly) LOTAnimatableNumberValue *positionX;
-@property (nonatomic, readonly) LOTAnimatableNumberValue *positionY;
+@property (nonatomic, readonly, nullable) LOTKeyframeGroup *positionX;
+@property (nonatomic, readonly, nullable) LOTKeyframeGroup *positionY;
 
-@property (nonatomic, readonly) LOTAnimatablePointValue *anchor;
-@property (nonatomic, readonly) LOTAnimatableScaleValue *scale;
-
-@property (nonatomic, readonly) BOOL hasOutAnimation;
-@property (nonatomic, readonly) BOOL hasInAnimation;
-@property (nonatomic, readonly) BOOL hasInOutAnimation;
-@property (nonatomic, readonly) NSArray *inOutKeyframes;
-@property (nonatomic, readonly) NSArray *inOutKeyTimes;
-@property (nonatomic, readonly) NSTimeInterval compDuration;
+@property (nonatomic, readonly) LOTKeyframeGroup *anchor;
+@property (nonatomic, readonly) LOTKeyframeGroup *scale;
 
 @property (nonatomic, readonly) LOTMatteType matteType;
 
 @end
+
+NS_ASSUME_NONNULL_END
